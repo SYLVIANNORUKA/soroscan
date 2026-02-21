@@ -122,7 +122,7 @@ class ContractEventAdmin(admin.ModelAdmin):
     list_filter = [
         "event_type",
         "validation_status",
-        "created_at",
+        "timestamp",
     ]
     search_fields = [
         "contract__contract_id",
@@ -143,10 +143,10 @@ class ContractEventAdmin(admin.ModelAdmin):
         "raw_xdr",
         "schema_version",
         "validation_status",
-        "created_at",
+        "timestamp",
     ]
-    ordering = ["-created_at"]
-    date_hierarchy = "created_at"
+    ordering = ["timestamp"]
+    date_hierarchy = "timestamp"
     actions = ["trigger_reindex"]
 
     def get_queryset(self, request):

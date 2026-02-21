@@ -82,12 +82,56 @@ Code Style:
 - **Rust:** Please run cargo fmt before committing.
 
 
-### Datbase Migrations 
-If you modify models.py, ensure you generate migration files:
+### Database Migrations 
+Database migrations are critical for maintaining schema consistency across environments.
 
-```Bash
+#### When to Run `makemigrations`
+Run this command **whenever you modify any Django model** in `models.py`:
+
+```bash
 python manage.py makemigrations
 ```
+
+This generates a new migration file in `migrations/` that describes the schema changes.
+
+**Important:** Always commit the generated migration file with your PR!
+
+#### When to Run `migrate`
+Run this command in these situations:
+
+1. **After pulling changes** from `main` that include new migrations:
+   ```bash
+   git pull origin main
+   python manage.py migrate
+   ```
+
+2. **After checking out a PR branch** to test it locally:
+   ```bash
+   gh pr checkout 123  # or git checkout feature-branch
+   python manage.py migrate
+   ```
+
+3. **After generating new migrations** yourself:
+   ```bash
+   python manage.py makemigrations
+   python manage.py migrate
+   ```
+
+#### Checking Migration Status
+To see which migrations are applied or pending:
+
+```bash
+python manage.py showmigrations
+```
+
+Migrations with `[X]` are applied, `[ ]` are pending.
+
+#### PR Requirements
+If your PR modifies models:
+- ✅ Include the generated migration file(s)
+- ✅ Ensure `python manage.py migrate` runs without errors
+- ✅ Run tests after migrating to verify compatibility
+
 ### 4. Testing
 We prioritize stability. **Please run the test suite before submitting your PR.**
 

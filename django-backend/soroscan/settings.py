@@ -1,7 +1,6 @@
 """
 Django settings for SoroScan project.
 """
-import os
 from pathlib import Path
 
 import environ

@@ -4,7 +4,7 @@ Django Admin configuration for SoroScan models.
 from django import forms
 from django.contrib import admin, messages
 from django.contrib.admin.helpers import ActionForm
-from django.db.models import Count, F, Q
+from django.db.models import Count
 from django.utils.html import format_html
 
 from .models import ContractEvent, IndexerState, TrackedContract, WebhookSubscription, EventSchema

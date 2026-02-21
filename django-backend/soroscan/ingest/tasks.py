@@ -382,7 +382,7 @@ def sync_events_from_horizon() -> int:
         )
         return new_events
 
-    except Exception as e:
+    except Exception:
         logger.exception("Failed to sync events from Horizon", extra={})
         return 0
 

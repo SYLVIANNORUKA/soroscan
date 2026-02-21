@@ -157,11 +157,11 @@ class TestGraphQLQueries:
         assert len(result.data["events"]) <= 1000
 
     def test_query_events_time_range(self, contract):
-        old_event = ContractEventFactory(
+        ContractEventFactory(
             contract=contract,
             timestamp=timezone.now() - timezone.timedelta(days=2)
         )
-        new_event = ContractEventFactory(
+        ContractEventFactory(
             contract=contract,
             timestamp=timezone.now()
         )

@@ -12,7 +12,7 @@ from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
-from .models import ContractEvent, TrackedContract, WebhookSubscription, EventSchema
+from .models import ContractEvent, TrackedContract, WebhookSubscription
 from .serializers import (
     ContractEventSerializer,
     RecordEventRequestSerializer,

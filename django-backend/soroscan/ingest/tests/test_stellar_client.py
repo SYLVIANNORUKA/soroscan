@@ -1,9 +1,8 @@
 import pytest
-import responses
 from stellar_sdk import Keypair, StrKey
 from unittest.mock import MagicMock, patch
 
-from soroscan.ingest.stellar_client import SorobanClient, TransactionResult
+from soroscan.ingest.stellar_client import SorobanClient
 
 
 @pytest.fixture

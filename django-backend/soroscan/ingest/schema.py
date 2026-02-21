@@ -4,11 +4,12 @@ GraphQL schema for SoroScan API using Strawberry.
 from datetime import datetime
 from typing import Optional
 
-import strawberry, strawberry_django
+import strawberry
+import strawberry_django
 from strawberry import auto
 from strawberry.types import Info
 
-from .models import ContractEvent, TrackedContract, EventSchema
+from .models import ContractEvent, TrackedContract
 
 
 @strawberry_django.type(TrackedContract)

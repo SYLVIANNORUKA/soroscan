@@ -5,7 +5,7 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APIClient
 
-from soroscan.ingest.models import ContractEvent, TrackedContract, WebhookSubscription
+from soroscan.ingest.models import TrackedContract, WebhookSubscription
 
 from .factories import (
     ContractEventFactory,

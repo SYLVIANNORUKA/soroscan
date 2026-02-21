@@ -1,9 +1,7 @@
 import pytest
 import responses
 from celery.exceptions import Retry
-from django.utils import timezone
 
-from soroscan.ingest.models import WebhookSubscription
 from soroscan.ingest.tasks import (
     dispatch_webhook,
     process_new_event,
@@ -11,7 +9,6 @@ from soroscan.ingest.tasks import (
 )
 
 from .factories import (
-    ContractEventFactory,
     EventSchemaFactory,
     TrackedContractFactory,
     UserFactory,
@@ -155,7 +152,7 @@ class TestProcessNewEvent:
         webhook2 = WebhookSubscriptionFactory(
             contract=contract, event_type="", is_active=True
         )
-        webhook3 = WebhookSubscriptionFactory(
+        WebhookSubscriptionFactory(
             contract=contract, event_type="transfer", is_active=True
         )
 

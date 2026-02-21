@@ -6,7 +6,7 @@ from dataclasses import dataclass
 from typing import Any, Optional
 
 from django.conf import settings
-from stellar_sdk import Keypair, Network, TransactionBuilder
+from stellar_sdk import Keypair, TransactionBuilder
 from stellar_sdk.soroban_server import SorobanServer
 from stellar_sdk.xdr import (
     SCVal,
@@ -212,14 +212,14 @@ class SorobanClient:
 
             if simulate_response.results:
                 # Parse the u64 result
-                result_xdr = simulate_response.results[0].xdr
+                # result_xdr = simulate_response.results[0].xdr
                 # Decode and return the value
                 # This is simplified - actual implementation needs XDR parsing
                 return None  # TODO: Parse XDR result
 
             return None
 
-        except Exception as e:
+        except Exception:
             logger.exception("Failed to get total events")
             return None
 

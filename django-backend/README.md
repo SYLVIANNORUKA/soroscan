@@ -46,6 +46,7 @@ DEBUG=True
 SECRET_KEY=your-secret-key-here
 DATABASE_URL=postgres://user:pass@localhost:5432/soroscan
 REDIS_URL=redis://localhost:6379/0
+FRONTEND_BASE_URL=http://localhost:3000
 
 # Stellar
 SOROBAN_RPC_URL=https://soroban-testnet.stellar.org

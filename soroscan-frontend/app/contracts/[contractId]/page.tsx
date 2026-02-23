@@ -13,7 +13,7 @@ import {
 } from "@/components/ingest/contract-graphql";
 import type { Contract, ContractFormData, BackfillTask } from "@/components/ingest/contract-types";
 
-export default function ContractDetailPage({ params }: { params: { id: string } }) {
+export default function ContractDetailPage({ params }: { params: { contractId: string } }) {
   const router = useRouter();
   const [contract, setContract] = React.useState<Contract | null>(null);
   const [isLoading, setIsLoading] = React.useState(true);
@@ -26,7 +26,7 @@ export default function ContractDetailPage({ params }: { params: { id: string } 
     try {
       setIsLoading(true);
       setError(null);
-      const data = await getContract(params.id);
+      const data = await getContract(params.contractId);
       setContract(data);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to load contract");
@@ -40,7 +40,7 @@ export default function ContractDetailPage({ params }: { params: { id: string } 
   }, [loadContract]);
 
   const handleSave = async (data: ContractFormData) => {
-    const updated = await updateContract(params.id, data);
+    const updated = await updateContract(params.contractId, data);
     setContract(updated);
     setIsEditing(false);
   };

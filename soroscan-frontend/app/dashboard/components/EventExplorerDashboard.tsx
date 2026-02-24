@@ -169,7 +169,6 @@ export function EventExplorerDashboard() {
 
         showToast("Event export started.", "success");
       } catch (error) {
-        // eslint-disable-next-line no-console
         console.error("Failed to export events:", error);
         showToast("Failed to export events.", "error");
       }

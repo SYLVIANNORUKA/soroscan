@@ -33,7 +33,7 @@ export default function ContractDetailPage({ params }: { params: { contractId: s
     } finally {
       setIsLoading(false);
     }
-  }, [params.id]);
+  }, [params.contractId]);
 
   React.useEffect(() => {
     loadContract();

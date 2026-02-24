@@ -16,6 +16,32 @@ from .models import ContractEvent, TrackedContract
 from .services.timeline import build_timeline
 
 
+def _get_authenticated_user(info: Info):
+    """Safely extract authenticated user from context.
+    
+    Returns the user if authenticated, otherwise returns None.
+    Handles cases where context is None (e.g., during testing).
+    """
+    if info.context is None:
+        return None
+    
+    if not hasattr(info.context, 'request'):
+        return None
+        
+    request = info.context.request
+    if request is None:
+        return None
+        
+    if not hasattr(request, 'user'):
+        return None
+        
+    user = request.user
+    if user and hasattr(user, 'is_authenticated') and user.is_authenticated:
+        return user
+        
+    return None
+
+
 @strawberry_django.type(TrackedContract)
 class ContractType:
     id: auto
@@ -305,14 +331,15 @@ class Mutation:
         description: str = "",
     ) -> ContractType:
         """Register a new contract for indexing."""
-        if not info.context.request.user.is_authenticated:
+        user = _get_authenticated_user(info)
+        if not user:
             raise Exception("Authentication required")
         
         contract = TrackedContract.objects.create(
             contract_id=contract_id,
             name=name,
             description=description,
-            owner=info.context.request.user,
+            owner=user,
         )
         return contract
 
@@ -326,7 +353,8 @@ class Mutation:
         is_active: Optional[bool] = None,
     ) -> Optional[ContractType]:
         """Update a tracked contract."""
-        if not info.context.request.user.is_authenticated:
+        user = _get_authenticated_user(info)
+        if not user:
             raise Exception("Authentication required")
         
         try:

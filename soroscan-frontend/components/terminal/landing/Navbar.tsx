@@ -20,6 +20,7 @@ export function Navbar() {
   return (
     <nav className="border-b border-terminal-green/30 px-6 md:px-8 py-4 flex flex-col bg-terminal-black/80 backdrop-blur-md sticky top-0 z-50">
       <div className="flex justify-between items-center">
+<<<<<<< HEAD
         <Link href="/" className="text-terminal-green text-lg md:text-xl font-bold tracking-tighter hover:text-terminal-cyan transition-colors font-terminal-mono">
           [SOROSCAN]
         </Link>
@@ -31,29 +32,107 @@ export function Navbar() {
               </a>
             ) : (
               <Link key={link.href} href={link.href} className={`hover:text-terminal-green transition-colors ${pathname === link.href ? "text-terminal-green underline underline-offset-4" : ""}`}>
+=======
+        {/* Logo */}
+        <Link
+          href="/"
+          className="text-terminal-green text-lg md:text-xl font-bold tracking-tighter hover:text-terminal-cyan transition-colors font-terminal-mono"
+        >
+          [SOROSCAN]
+        </Link>
+
+        {/* Desktop links */}
+        <div className="hidden md:flex gap-6 lg:gap-8 text-xs text-terminal-gray uppercase tracking-widest items-center">
+          {navLinks.map((link) =>
+            link.external ? (
+              <a
+                key={link.href}
+                href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-terminal-green transition-colors"
+              >
+                {link.label}
+              </a>
+            ) : (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={`hover:text-terminal-green transition-colors ${
+                  pathname === link.href ? "text-terminal-green underline underline-offset-4" : ""
+                }`}
+              >
+>>>>>>> e3d26a9f84ce0bd784f710b87841afe5ffe7ad30
                 {link.label}
               </Link>
             )
           )}
         </div>
+<<<<<<< HEAD
         <div className="flex items-center gap-3">
           <a href="/api/docs/" target="_blank" rel="noopener noreferrer" className="hidden md:block">
             <Button size="sm" variant="secondary">GET_API_KEY</Button>
           </a>
           <button className="md:hidden text-terminal-green hover:text-terminal-cyan transition-colors p-1 min-w-[44px] min-h-[44px] flex items-center justify-center" onClick={() => setOpen((o) => !o)} aria-label="Toggle menu">
+=======
+
+        <div className="flex items-center gap-3">
+          <a
+            href="/api/docs/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hidden md:block"
+          >
+            <Button size="sm" variant="secondary">GET_API_KEY</Button>
+          </a>
+
+          {/* Mobile hamburger */}
+          <button
+            className="md:hidden text-terminal-green hover:text-terminal-cyan transition-colors p-1"
+            onClick={() => setOpen((o) => !o)}
+            aria-label="Toggle menu"
+          >
+>>>>>>> e3d26a9f84ce0bd784f710b87841afe5ffe7ad30
             {open ? <X size={20} /> : <Menu size={20} />}
           </button>
         </div>
       </div>
+<<<<<<< HEAD
+=======
+
+      {/* Mobile menu */}
+>>>>>>> e3d26a9f84ce0bd784f710b87841afe5ffe7ad30
       {open && (
         <div className="md:hidden mt-4 pb-2 border-t border-terminal-green/20 pt-4 flex flex-col gap-4 text-xs uppercase tracking-widest text-terminal-gray">
           {navLinks.map((link) =>
             link.external ? (
+<<<<<<< HEAD
               <a key={link.href} href={link.href} target="_blank" rel="noopener noreferrer" className="hover:text-terminal-green transition-colors py-1" onClick={() => setOpen(false)}>
                 {link.label}
               </a>
             ) : (
               <Link key={link.href} href={link.href} className={`hover:text-terminal-green transition-colors py-1 ${pathname === link.href ? "text-terminal-green" : ""}`} onClick={() => setOpen(false)}>
+=======
+              <a
+                key={link.href}
+                href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-terminal-green transition-colors py-1"
+                onClick={() => setOpen(false)}
+              >
+                {link.label}
+              </a>
+            ) : (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={`hover:text-terminal-green transition-colors py-1 ${
+                  pathname === link.href ? "text-terminal-green" : ""
+                }`}
+                onClick={() => setOpen(false)}
+              >
+>>>>>>> e3d26a9f84ce0bd784f710b87841afe5ffe7ad30
                 {link.label}
               </Link>
             )

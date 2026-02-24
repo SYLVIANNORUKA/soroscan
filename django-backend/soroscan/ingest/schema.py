@@ -305,11 +305,14 @@ class Mutation:
         description: str = "",
     ) -> ContractType:
         """Register a new contract for indexing."""
+        if not info.context.request.user.is_authenticated:
+            raise Exception("Authentication required")
+        
         contract = TrackedContract.objects.create(
             contract_id=contract_id,
             name=name,
             description=description,
-            owner_id=1,
+            owner=info.context.request.user,
         )
         return contract
 
@@ -323,6 +326,9 @@ class Mutation:
         is_active: Optional[bool] = None,
     ) -> Optional[ContractType]:
         """Update a tracked contract."""
+        if not info.context.request.user.is_authenticated:
+            raise Exception("Authentication required")
+        
         try:
             contract = TrackedContract.objects.get(contract_id=contract_id)
         except TrackedContract.DoesNotExist:

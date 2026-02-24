@@ -2,50 +2,105 @@
 
 import * as React from "react"
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 import { Button } from "../Button"
+import { Menu, X } from "lucide-react"
+
+const navLinks = [
+  { href: "/docs",      label: "DOCS" },
+  { href: "/features",  label: "FEATURES" },
+  { href: "/api/docs/", label: "API_DOCS", external: true },
+  { href: "https://github.com/SoroScan/soroscan", label: "GITHUB", external: true },
+]
 
 export function Navbar() {
-  const [menuOpen, setMenuOpen] = React.useState(false)
+  const [open, setOpen] = React.useState(false)
+  const pathname = usePathname()
 
   return (
-    <nav className="border-b border-terminal-green/30 px-4 md:px-8 py-4 bg-terminal-black/50 backdrop-blur-md sticky top-0 z-50">
+    <nav className="border-b border-terminal-green/30 px-6 md:px-8 py-4 flex flex-col bg-terminal-black/80 backdrop-blur-md sticky top-0 z-50">
       <div className="flex justify-between items-center">
-        <Link href="/" className="text-terminal-green text-xl font-bold tracking-tighter hover:text-terminal-cyan transition-colors">
-          [SOROSCAN_PROJECT]
+        <Link
+          href="/"
+          className="text-terminal-green text-lg md:text-xl font-bold tracking-tighter hover:text-terminal-cyan transition-colors font-terminal-mono"
+        >
+          [SOROSCAN]
         </Link>
 
-        {/* Desktop nav */}
-        <div className="hidden md:flex gap-8 text-xs text-terminal-gray uppercase tracking-widest">
-          <Link href="/dashboard" className="hover:text-terminal-green transition-colors">Dashboard</Link>
-          <Link href="/gallery" className="hover:text-terminal-green transition-colors">Gallery</Link>
-          <a href="#" className="hover:text-terminal-green transition-colors">API_Docs</a>
-          <a href="#" className="hover:text-terminal-green transition-colors">GitHub</a>
+        {/* Desktop links */}
+        <div className="hidden md:flex gap-6 lg:gap-8 text-xs text-terminal-gray uppercase tracking-widest items-center">
+          {navLinks.map((link) =>
+            link.external ? (
+              
+                key={link.href}
+                href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-terminal-green transition-colors"
+              >
+                {link.label}
+              </a>
+            ) : (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={`hover:text-terminal-green transition-colors ${
+                  pathname === link.href ? "text-terminal-green underline underline-offset-4" : ""
+                }`}
+              >
+                {link.label}
+              </Link>
+            )
+          )}
         </div>
 
-        <div className="hidden md:block">
-          <Button size="sm" variant="secondary">CONNECT_WALLET</Button>
-        </div>
+        <div className="flex items-center gap-3">
+          <a href="/api/docs/" target="_blank" rel="noopener noreferrer" className="hidden md:block">
+            <Button size="sm" variant="secondary">GET_API_KEY</Button>
+          </a>
 
-        {/* Hamburger button (mobile only) */}
-        <button
-          className="md:hidden flex flex-col gap-1.5 p-2 min-w-[44px] min-h-[44px] items-center justify-center border border-terminal-green/30 text-terminal-green"
-          onClick={() => setMenuOpen(!menuOpen)}
-          aria-label="Toggle menu"
-        >
-          <span className={`block w-5 h-0.5 bg-terminal-green transition-all ${menuOpen ? "rotate-45 translate-y-2" : ""}`} />
-          <span className={`block w-5 h-0.5 bg-terminal-green transition-all ${menuOpen ? "opacity-0" : ""}`} />
-          <span className={`block w-5 h-0.5 bg-terminal-green transition-all ${menuOpen ? "-rotate-45 -translate-y-2" : ""}`} />
-        </button>
+          {/* Mobile hamburger */}
+          <button
+            className="md:hidden text-terminal-green hover:text-terminal-cyan transition-colors p-1 min-w-[44px] min-h-[44px] flex items-center justify-center"
+            onClick={() => setOpen((o) => !o)}
+            aria-label="Toggle menu"
+          >
+            {open ? <X size={20} /> : <Menu size={20} />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile menu */}
-      {menuOpen && (
-        <div className="md:hidden mt-4 flex flex-col gap-4 text-xs text-terminal-gray uppercase tracking-widest border-t border-terminal-green/20 pt-4">
-          <Link href="/dashboard" className="hover:text-terminal-green transition-colors py-2" onClick={() => setMenuOpen(false)}>Dashboard</Link>
-          <Link href="/gallery" className="hover:text-terminal-green transition-colors py-2" onClick={() => setMenuOpen(false)}>Gallery</Link>
-          <a href="#" className="hover:text-terminal-green transition-colors py-2">API_Docs</a>
-          <a href="#" className="hover:text-terminal-green transition-colors py-2">GitHub</a>
-          <Button size="sm" variant="secondary">CONNECT_WALLET</Button>
+      {open && (
+        <div className="md:hidden mt-4 pb-2 border-t border-terminal-green/20 pt-4 flex flex-col gap-4 text-xs uppercase tracking-widest text-terminal-gray">
+          {navLinks.map((link) =>
+            link.external ? (
+              
+                key={link.href}
+                href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-terminal-green transition-colors py-1"
+                onClick={() => setOpen(false)}
+              >
+                {link.label}
+              </a>
+            ) : (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={`hover:text-terminal-green transition-colors py-1 ${
+                  pathname === link.href ? "text-terminal-green" : ""
+                }`}
+                onClick={() => setOpen(false)}
+              >
+                {link.label}
+              </Link>
+            )
+          )}
+          <a href="/api/docs/" target="_blank" rel="noopener noreferrer" className="mt-2">
+            <Button size="sm" variant="secondary" className="w-full justify-center">GET_API_KEY</Button>
+          </a>
         </div>
       )}
     </nav>

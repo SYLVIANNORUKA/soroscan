@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('ingest', '0018_merge_webhook_timeout_and_eventdedup'),
+        ('ingest', '0019_merge_20260327_1621'),
     ]
 
     operations = [

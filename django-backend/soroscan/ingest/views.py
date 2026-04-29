@@ -1472,3 +1472,32 @@ def deployment_timeline_view(request, contract_id):
         "abi_versions": ContractABIVersionSerializer(abi_versions, many=True).data,
         "compatibility_warnings": warnings,
     })
+
+
+# ---------------------------------------------------------------------------
+# Issue: Contract Identity Endpoint
+# ---------------------------------------------------------------------------
+
+@extend_schema(
+    responses=inline_serializer(
+        name="ContractIdentityResponse",
+        fields={
+            "contract_id": serializers.CharField(),
+            "network_passphrase": serializers.CharField(),
+            "rpc_url": serializers.CharField(),
+        },
+    )
+)
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def contract_identity_view(request):
+    """
+    GET /api/contract/identity/
+    Returns the SoroScan contract ID and network information.
+    Allows clients to verify where events are coming from.
+    """
+    return Response({
+        "contract_id": getattr(settings, "SOROSCAN_CONTRACT_ID", ""),
+        "network_passphrase": getattr(settings, "STELLAR_NETWORK_PASSPHRASE", ""),
+        "rpc_url": getattr(settings, "SOROBAN_RPC_URL", ""),
+    })

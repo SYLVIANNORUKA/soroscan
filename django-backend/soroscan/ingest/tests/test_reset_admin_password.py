@@ -87,8 +87,9 @@ class TestResetAdminPasswordCommand:
         assert "user1" in output
         assert "user2" in output
 
+    @patch("sys.stdin.isatty", return_value=True)
     @patch("getpass.getpass")
-    def test_interactive_password_prompt(self, mock_getpass):
+    def test_interactive_password_prompt(self, mock_getpass, mock_isatty):
         """Test interactive password prompt."""
         # Create admin user
         user = User.objects.create_user(username="admin", password="oldpass")
@@ -104,8 +105,9 @@ class TestResetAdminPasswordCommand:
         assert user.check_password("newpass789")
         assert mock_getpass.call_count == 2
 
+    @patch("sys.stdin.isatty", return_value=True)
     @patch("getpass.getpass")
-    def test_interactive_password_mismatch(self, mock_getpass):
+    def test_interactive_password_mismatch(self, mock_getpass, mock_isatty):
         """Test error when passwords don't match."""
         # Create admin user
         User.objects.create_user(username="admin", password="oldpass")
@@ -118,8 +120,9 @@ class TestResetAdminPasswordCommand:
         
         assert "do not match" in str(exc_info.value).lower()
 
+    @patch("sys.stdin.isatty", return_value=True)
     @patch("getpass.getpass")
-    def test_interactive_empty_password(self, mock_getpass):
+    def test_interactive_empty_password(self, mock_getpass, mock_isatty):
         """Test error when empty password is provided."""
         # Create admin user
         User.objects.create_user(username="admin", password="oldpass")

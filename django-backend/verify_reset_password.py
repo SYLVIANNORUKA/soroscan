@@ -5,17 +5,18 @@ Run this to verify the command works without full test environment.
 """
 import os
 import sys
-import django
 
-# Setup Django
+# Setup Django before importing Django modules
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'soroscan.settings_test')
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
+import django  # noqa: E402
+
 django.setup()
 
-from django.contrib.auth import get_user_model
-from django.core.management import call_command
-from io import StringIO
+from django.contrib.auth import get_user_model  # noqa: E402
+from django.core.management import call_command  # noqa: E402
+from io import StringIO  # noqa: E402
 
 User = get_user_model()
 

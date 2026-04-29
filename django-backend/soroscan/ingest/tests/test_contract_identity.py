@@ -120,7 +120,7 @@ class TestContractIdentityEndpoint:
         assert response.status_code == 405
 
     @override_settings(
-        SOROSCAN_CONTRACT_ID="CABC123DEF456GHI789JKL012MNO345PQR678STU901VWX234YZ",
+        SOROSCAN_CONTRACT_ID="CABC123DEF456GHI789JKL012MNO345PQR678STU901VWX234YZA5",
         STELLAR_NETWORK_PASSPHRASE="Public Global Stellar Network ; September 2015",
         SOROBAN_RPC_URL="https://soroban-mainnet.stellar.org"
     )

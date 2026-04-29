@@ -14,7 +14,7 @@ class TestContractIdentityEndpoint:
     def test_endpoint_returns_contract_id(self):
         """Test that endpoint returns the SOROSCAN_CONTRACT_ID."""
         client = APIClient()
-        response = client.get("/api/contract/identity/")
+        response = client.get("/api/ingest/contract/identity/")
         
         assert response.status_code == 200
         assert "contract_id" in response.data
@@ -23,7 +23,7 @@ class TestContractIdentityEndpoint:
     def test_endpoint_returns_network_passphrase(self):
         """Test that endpoint returns the network passphrase."""
         client = APIClient()
-        response = client.get("/api/contract/identity/")
+        response = client.get("/api/ingest/contract/identity/")
         
         assert response.status_code == 200
         assert "network_passphrase" in response.data
@@ -32,7 +32,7 @@ class TestContractIdentityEndpoint:
     def test_endpoint_returns_rpc_url(self):
         """Test that endpoint returns the RPC URL."""
         client = APIClient()
-        response = client.get("/api/contract/identity/")
+        response = client.get("/api/ingest/contract/identity/")
         
         assert response.status_code == 200
         assert "rpc_url" in response.data
@@ -41,7 +41,7 @@ class TestContractIdentityEndpoint:
     def test_endpoint_returns_all_required_fields(self):
         """Test that endpoint returns all required fields."""
         client = APIClient()
-        response = client.get("/api/contract/identity/")
+        response = client.get("/api/ingest/contract/identity/")
         
         assert response.status_code == 200
         assert set(response.data.keys()) == {"contract_id", "network_passphrase", "rpc_url"}
@@ -50,7 +50,7 @@ class TestContractIdentityEndpoint:
         """Test that endpoint doesn't require authentication."""
         client = APIClient()
         # No authentication
-        response = client.get("/api/contract/identity/")
+        response = client.get("/api/ingest/contract/identity/")
         
         assert response.status_code == 200
 
@@ -62,7 +62,7 @@ class TestContractIdentityEndpoint:
     def test_endpoint_reflects_environment_config(self):
         """Test that endpoint data matches environment configuration."""
         client = APIClient()
-        response = client.get("/api/contract/identity/")
+        response = client.get("/api/ingest/contract/identity/")
         
         assert response.status_code == 200
         assert response.data["contract_id"] == "CTEST123"
@@ -73,7 +73,7 @@ class TestContractIdentityEndpoint:
     def test_endpoint_handles_empty_contract_id(self):
         """Test that endpoint handles empty contract ID gracefully."""
         client = APIClient()
-        response = client.get("/api/contract/identity/")
+        response = client.get("/api/ingest/contract/identity/")
         
         assert response.status_code == 200
         assert response.data["contract_id"] == ""
@@ -81,7 +81,7 @@ class TestContractIdentityEndpoint:
     def test_endpoint_returns_json(self):
         """Test that endpoint returns JSON content type."""
         client = APIClient()
-        response = client.get("/api/contract/identity/")
+        response = client.get("/api/ingest/contract/identity/")
         
         assert response.status_code == 200
         assert response["Content-Type"] == "application/json"
@@ -89,7 +89,7 @@ class TestContractIdentityEndpoint:
     def test_json_structure_is_valid(self):
         """Test that JSON structure is valid and parseable."""
         client = APIClient()
-        response = client.get("/api/contract/identity/")
+        response = client.get("/api/ingest/contract/identity/")
         
         assert response.status_code == 200
         # Verify it's valid JSON by accessing data
@@ -104,19 +104,19 @@ class TestContractIdentityEndpoint:
         client = APIClient()
         
         # GET should work
-        response = client.get("/api/contract/identity/")
+        response = client.get("/api/ingest/contract/identity/")
         assert response.status_code == 200
         
         # POST should not be allowed
-        response = client.post("/api/contract/identity/", {})
+        response = client.post("/api/ingest/contract/identity/", {})
         assert response.status_code == 405
         
         # PUT should not be allowed
-        response = client.put("/api/contract/identity/", {})
+        response = client.put("/api/ingest/contract/identity/", {})
         assert response.status_code == 405
         
         # DELETE should not be allowed
-        response = client.delete("/api/contract/identity/")
+        response = client.delete("/api/ingest/contract/identity/")
         assert response.status_code == 405
 
     @override_settings(
@@ -127,7 +127,7 @@ class TestContractIdentityEndpoint:
     def test_mainnet_configuration(self):
         """Test endpoint with mainnet-like configuration."""
         client = APIClient()
-        response = client.get("/api/contract/identity/")
+        response = client.get("/api/ingest/contract/identity/")
         
         assert response.status_code == 200
         assert len(response.data["contract_id"]) == 56  # Stellar contract ID length
@@ -142,7 +142,7 @@ class TestContractIdentityEndpoint:
     def test_testnet_configuration(self):
         """Test endpoint with testnet configuration."""
         client = APIClient()
-        response = client.get("/api/contract/identity/")
+        response = client.get("/api/ingest/contract/identity/")
         
         assert response.status_code == 200
         assert response.data["contract_id"] == "CTEST123"
@@ -153,8 +153,8 @@ class TestContractIdentityEndpoint:
         """Test that endpoint returns consistent data across multiple requests."""
         client = APIClient()
         
-        response1 = client.get("/api/contract/identity/")
-        response2 = client.get("/api/contract/identity/")
+        response1 = client.get("/api/ingest/contract/identity/")
+        response2 = client.get("/api/ingest/contract/identity/")
         
         assert response1.status_code == 200
         assert response2.status_code == 200
@@ -165,9 +165,9 @@ class TestContractIdentityEndpoint:
         client = APIClient()
         
         # Should work with trailing slash
-        response = client.get("/api/contract/identity/")
+        response = client.get("/api/ingest/contract/identity/")
         assert response.status_code == 200
         
         # Should also work without trailing slash (Django redirects)
-        response = client.get("/api/contract/identity")
+        response = client.get("/api/ingest/contract/identity")
         assert response.status_code in [200, 301]

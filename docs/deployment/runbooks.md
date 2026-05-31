@@ -8,6 +8,22 @@ hide_title: false
 
 This page contains concise runbooks for common incidents and emergency procedures.
 
+## Incident Response Playbooks
+
+For detailed incident response procedures with automated remediation, see:
+
+- [Incident Response Overview](../incident-response/README.md) - Quick reference and alert mapping
+- [Event Ingestion Lag](../incident-response/event-ingestion-lag.md) - High severity
+- [Webhook Delivery Failures](../incident-response/webhook-delivery-failures.md) - Medium severity
+- [Database Connection Pool Exhausted](../incident-response/db-connection-pool-exhausted.md) - Critical severity
+- [RPC Endpoint Unavailable](../incident-response/rpc-endpoint-unavailable.md) - High severity
+
+These playbooks include:
+- Detailed diagnosis steps
+- Automated remediation scripts
+- Prometheus alert configurations
+- Communication templates
+
 ## Emergency restart procedure
 1. Notify on-call via PagerDuty/Slack.
 2. Scale down non-critical replicas if needed to free resources.
@@ -37,6 +53,8 @@ kubectl rollout undo deployment/soroscan-backend -n soroscan
 - Communicate expected load to stakeholders and delay non-critical jobs.
 
 ## Post-incident checklist
-- Document timeline and root cause.
-- Create follow-up tasks for recurring issues.
-- Review and update runbooks.
+- Document timeline and root cause using [incident template](../incident-response/incident-template.md)
+- Create follow-up tasks for recurring issues
+- Review and update runbooks and playbooks
+- Schedule post-mortem for Critical/High severity incidents
+- Update monitoring and alert thresholds if needed

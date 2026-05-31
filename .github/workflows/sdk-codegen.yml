@@ -54,12 +54,15 @@ jobs:
           python-version: '3.11'
           cache: 'pip'
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 8
+
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'npm'
-          cache-dependency-path: sdk/codegen/package-lock.json
 
       - name: Install Python dependencies
         working-directory: django-backend
@@ -91,13 +94,13 @@ jobs:
 
       - name: Install codegen dependencies
         working-directory: sdk/codegen
-        run: npm ci
+        run: pnpm install
 
       - name: Generate SDK types
         working-directory: sdk/codegen
         env:
           GRAPHQL_ENDPOINT: http://localhost:8000/graphql/
-        run: npm run generate
+        run: pnpm run generate
 
       - name: Check for changes
         id: check_changes
@@ -118,9 +121,9 @@ jobs:
       - name: Verify TypeScript SDK
         working-directory: sdk/typescript
         run: |
-          npm ci
-          npm run build
-          npm test
+          pnpm install
+          pnpm run build
+          pnpm test
 
       - name: Verify Python SDK
         working-directory: sdk/python
@@ -133,7 +136,7 @@ jobs:
         if: github.event_name == 'pull_request' && steps.check_changes.outputs.changed == 'true'
         run: |
           echo "❌ Generated types are out of sync with schema!"
-          echo "Please run 'cd sdk/codegen && npm run generate' and commit the changes."
+          echo "Please run 'cd sdk/codegen && pnpm run generate' and commit the changes."
           exit 1
 
       - name: Commit and push changes (main/develop only)

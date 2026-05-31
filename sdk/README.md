@@ -2,6 +2,10 @@
 
 Official SDKs for the SoroScan API - Stellar/Soroban event indexing.
 
+## 🎯 Auto-Generated Types
+
+All SDK types are **automatically generated** from the GraphQL schema to ensure type safety and consistency. See [CODEGEN_GUIDE.md](./CODEGEN_GUIDE.md) for details.
+
 ## Available SDKs
 
 ### Python SDK

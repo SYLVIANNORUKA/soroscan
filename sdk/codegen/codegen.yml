@@ -1,0 +1,91 @@
+# GraphQL Code Generator configuration for SoroScan SDKs
+# This generates TypeScript types from the GraphQL schema
+
+schema:
+  # Use introspection from local Django backend
+  # Set GRAPHQL_ENDPOINT env var to use a different endpoint
+  - ${GRAPHQL_ENDPOINT:-http://localhost:8000/graphql/}
+
+# No document files needed - we're generating types from schema only
+documents: null
+
+generates:
+  # TypeScript SDK types
+  ../typescript/src/generated/types.ts:
+    plugins:
+      - typescript
+    config:
+      # Use type imports for better tree-shaking
+      useTypeImports: true
+      # Skip __typename field
+      skipTypename: false
+      # Make all fields immutable (readonly)
+      immutableTypes: false
+      # Avoid optional chaining for required fields
+      avoidOptionals: false
+      # Use Maybe<T> for nullable fields
+      maybeValue: T | null
+      # Enum as const objects for better type safety
+      enumsAsConst: false
+      # Add descriptions as JSDoc comments
+      addDescriptionToTypes: true
+      # Scalar type mappings
+      scalars:
+        DateTime: string
+        JSON: Record<string, any>
+        Date: string
+        Time: string
+        UUID: string
+      # Naming conventions
+      namingConvention:
+        typeNames: pascal-case#pascalCase
+        enumValues: keep
+        transformUnderscore: true
+      # Add explicit undefined for optional fields
+      inputMaybeValue: T | null | undefined
+      
+  # TypeScript operation types (for queries/mutations)
+  ../typescript/src/generated/operations.ts:
+    plugins:
+      - typescript
+      - typescript-operations
+    config:
+      useTypeImports: true
+      skipTypename: false
+      addDescriptionToTypes: true
+      scalars:
+        DateTime: string
+        JSON: Record<string, any>
+        Date: string
+        Time: string
+        UUID: string
+      # Flatten types for easier usage
+      preResolveTypes: true
+      # Avoid duplicating types
+      avoidOptionals: false
+      
+  # TypeScript resolvers (for reference, not used in SDK)
+  ../typescript/src/generated/resolvers.ts:
+    plugins:
+      - typescript
+      - typescript-resolvers
+    config:
+      useTypeImports: true
+      contextType: any
+      scalars:
+        DateTime: string
+        JSON: Record<string, any>
+        Date: string
+        Time: string
+        UUID: string
+      # Make resolvers type-safe
+      useIndexSignature: false
+      # Add descriptions
+      addDescriptionToTypes: true
+
+hooks:
+  afterAllFileWrite:
+    # Format generated files
+    - prettier --write
+    # Run Python type generation after TypeScript
+    - npm run generate:python

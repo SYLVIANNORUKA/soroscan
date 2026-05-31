@@ -1,0 +1,27 @@
+{
+  "name": "@soroscan/sdk-codegen",
+  "version": "1.0.0",
+  "description": "Code generation tools for SoroScan SDKs",
+  "private": true,
+  "scripts": {
+    "generate": "npm run generate:typescript && npm run generate:python",
+    "generate:typescript": "graphql-codegen --config codegen.yml",
+    "generate:python": "tsx scripts/generate-python-types.ts",
+    "generate:watch": "graphql-codegen --config codegen.yml --watch",
+    "introspect": "tsx scripts/introspect-schema.ts",
+    "validate": "npm run generate && npm run test:sdks",
+    "test:sdks": "cd ../typescript && npm test && cd ../python && pytest"
+  },
+  "dependencies": {
+    "@graphql-codegen/cli": "^5.0.2",
+    "@graphql-codegen/typescript": "^4.0.9",
+    "@graphql-codegen/typescript-operations": "^4.2.3",
+    "@graphql-codegen/typescript-resolvers": "^4.2.1",
+    "graphql": "^16.9.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.6.3"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2"
+  }
+}

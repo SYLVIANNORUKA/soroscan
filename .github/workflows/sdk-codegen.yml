@@ -1,0 +1,165 @@
+name: SDK Code Generation
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - 'django-backend/soroscan/ingest/schema.py'
+      - 'sdk/codegen/**'
+  pull_request:
+    paths:
+      - 'django-backend/soroscan/ingest/schema.py'
+      - 'sdk/codegen/**'
+  workflow_dispatch:
+
+jobs:
+  generate-types:
+    name: Generate SDK Types
+    runs-on: ubuntu-latest
+    
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_DB: soroscan_test
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+      
+      redis:
+        image: redis:7-alpine
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: sdk/codegen/package-lock.json
+
+      - name: Install Python dependencies
+        working-directory: django-backend
+        run: |
+          pip install -r requirements.txt
+
+      - name: Run Django migrations
+        working-directory: django-backend
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/soroscan_test
+          REDIS_URL: redis://localhost:6379/0
+          SECRET_KEY: test-secret-key-for-ci
+          DEBUG: 'True'
+        run: |
+          python manage.py migrate --noinput
+
+      - name: Start Django server
+        working-directory: django-backend
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/soroscan_test
+          REDIS_URL: redis://localhost:6379/0
+          SECRET_KEY: test-secret-key-for-ci
+          DEBUG: 'True'
+        run: |
+          python manage.py runserver 8000 &
+          echo $! > django.pid
+          # Wait for server to be ready
+          timeout 30 bash -c 'until curl -f http://localhost:8000/health/ 2>/dev/null; do sleep 1; done'
+
+      - name: Install codegen dependencies
+        working-directory: sdk/codegen
+        run: npm ci
+
+      - name: Generate SDK types
+        working-directory: sdk/codegen
+        env:
+          GRAPHQL_ENDPOINT: http://localhost:8000/graphql/
+        run: npm run generate
+
+      - name: Check for changes
+        id: check_changes
+        run: |
+          if git diff --quiet sdk/typescript/src/generated/ sdk/python/soroscan/generated/; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Show diff
+        if: steps.check_changes.outputs.changed == 'true'
+        run: |
+          echo "::group::Generated type changes"
+          git diff sdk/typescript/src/generated/ sdk/python/soroscan/generated/
+          echo "::endgroup::"
+
+      - name: Verify TypeScript SDK
+        working-directory: sdk/typescript
+        run: |
+          npm ci
+          npm run build
+          npm test
+
+      - name: Verify Python SDK
+        working-directory: sdk/python
+        run: |
+          pip install -e .
+          pip install pytest pytest-cov
+          pytest
+
+      - name: Fail if types are out of sync (PR only)
+        if: github.event_name == 'pull_request' && steps.check_changes.outputs.changed == 'true'
+        run: |
+          echo "❌ Generated types are out of sync with schema!"
+          echo "Please run 'cd sdk/codegen && npm run generate' and commit the changes."
+          exit 1
+
+      - name: Commit and push changes (main/develop only)
+        if: github.event_name == 'push' && steps.check_changes.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add sdk/typescript/src/generated/ sdk/python/soroscan/generated/
+          git commit -m "chore: regenerate SDK types from schema [skip ci]"
+          git push
+
+      - name: Stop Django server
+        if: always()
+        working-directory: django-backend
+        run: |
+          if [ -f django.pid ]; then
+            kill $(cat django.pid) || true
+            rm django.pid
+          fi
+
+      - name: Upload generated types as artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: generated-types
+          path: |
+            sdk/typescript/src/generated/
+            sdk/python/soroscan/generated/
+          retention-days: 7

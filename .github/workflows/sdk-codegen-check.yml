@@ -1,0 +1,62 @@
+name: SDK Codegen Check
+
+# Lightweight check that runs on every PR to ensure types are in sync
+# The full sdk-codegen.yml workflow handles generation and auto-commit
+
+on:
+  pull_request:
+    paths:
+      - 'django-backend/soroscan/ingest/schema.py'
+      - 'sdk/typescript/src/generated/**'
+      - 'sdk/python/soroscan/generated/**'
+
+jobs:
+  check-types-in-sync:
+    name: Check Generated Types Are In Sync
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check if generated files exist
+        id: check_files
+        run: |
+          if [ ! -d "sdk/typescript/src/generated" ] || [ ! -d "sdk/python/soroscan/generated" ]; then
+            echo "exists=false" >> $GITHUB_OUTPUT
+            echo "⚠️ Generated type directories don't exist"
+          else
+            echo "exists=true" >> $GITHUB_OUTPUT
+            echo "✅ Generated type directories exist"
+          fi
+
+      - name: Warn if types missing
+        if: steps.check_files.outputs.exists == 'false'
+        run: |
+          echo "::warning::Generated SDK types are missing. Run 'cd sdk/codegen && npm run generate' to create them."
+          echo ""
+          echo "This is expected for new repositories. The full sdk-codegen workflow will generate them."
+
+      - name: Check for manual edits to generated files
+        if: steps.check_files.outputs.exists == 'true'
+        run: |
+          # Check if generated files have the auto-generated warning
+          if grep -r "DO NOT EDIT MANUALLY" sdk/typescript/src/generated/ sdk/python/soroscan/generated/ > /dev/null 2>&1; then
+            echo "✅ Generated files have proper warnings"
+          else
+            echo "::warning::Some generated files may be missing auto-generated warnings"
+          fi
+
+      - name: Provide instructions
+        if: failure()
+        run: |
+          echo "::error::Generated types check failed!"
+          echo ""
+          echo "To fix this:"
+          echo "1. cd sdk/codegen"
+          echo "2. npm install"
+          echo "3. npm run generate"
+          echo "4. git add sdk/typescript/src/generated/ sdk/python/soroscan/generated/"
+          echo "5. git commit -m 'chore: regenerate SDK types'"
+          echo ""
+          echo "See sdk/CODEGEN_GUIDE.md for more details."

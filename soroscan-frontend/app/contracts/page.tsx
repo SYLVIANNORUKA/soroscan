@@ -12,8 +12,10 @@ import {
   deleteContract,
 } from "@/components/ingest/contract-graphql";
 import type { Contract, ContractFormData } from "@/components/ingest/contract-types";
+import { useOnboarding } from "@/context/OnboardingContext";
 
 export default function ContractsPage() {
+  const { startOnboarding, isActive } = useOnboarding();
   const [contracts, setContracts] = React.useState<Contract[]>([]);
   const [isLoading, setIsLoading] = React.useState(true);
   const [isRegisterModalOpen, setIsRegisterModalOpen] = React.useState(false);

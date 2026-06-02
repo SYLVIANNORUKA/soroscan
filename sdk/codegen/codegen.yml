@@ -63,25 +63,6 @@ generates:
       preResolveTypes: true
       # Avoid duplicating types
       avoidOptionals: false
-      
-  # TypeScript resolvers (for reference, not used in SDK)
-  ../typescript/src/generated/resolvers.ts:
-    plugins:
-      - typescript
-      - typescript-resolvers
-    config:
-      useTypeImports: true
-      contextType: any
-      scalars:
-        DateTime: string
-        JSON: Record<string, any>
-        Date: string
-        Time: string
-        UUID: string
-      # Make resolvers type-safe
-      useIndexSignature: false
-      # Add descriptions
-      addDescriptionToTypes: true
 
 hooks:
   afterAllFileWrite:

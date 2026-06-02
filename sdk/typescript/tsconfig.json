@@ -17,5 +17,5 @@
     "skipLibCheck": true
   },
   "include": ["src", "tsconfig.cjs.json"],
-  "exclude": ["node_modules", "dist", "tests"]
+  "exclude": ["node_modules", "dist", "tests", "src/generated/resolvers.ts"]
 }

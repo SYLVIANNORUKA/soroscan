@@ -5,6 +5,8 @@ import json
 
 from django.conf import settings
 from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
 from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
 from strawberry.django.views import GraphQLView
 
@@ -23,6 +25,7 @@ def _is_introspection_query(body: bytes) -> bool:
     return any(field in query for field in _INTROSPECTION_FIELDS)
 
 
+@method_decorator(csrf_exempt, name='dispatch')
 class ThrottledGraphQLView(GraphQLView):
     """
     GraphQL view with rate limiting and optional introspection blocking.

@@ -79,6 +79,8 @@ jobs:
           SOROBAN_RPC_URL: https://soroban-testnet.stellar.org
           STELLAR_NETWORK_PASSPHRASE: 'Test SDF Network ; September 2015'
           SOROSCAN_CONTRACT_ID: test-contract-id
+          ALLOWED_HOSTS: localhost,127.0.0.1
+          CSRF_TRUSTED_ORIGINS: http://localhost:8000
         run: |
           python manage.py migrate --noinput
 
@@ -92,6 +94,9 @@ jobs:
           SOROBAN_RPC_URL: https://soroban-testnet.stellar.org
           STELLAR_NETWORK_PASSPHRASE: 'Test SDF Network ; September 2015'
           SOROSCAN_CONTRACT_ID: test-contract-id
+          ALLOWED_HOSTS: localhost,127.0.0.1
+          CSRF_TRUSTED_ORIGINS: http://localhost:8000
+          GRAPHQL_INTROSPECTION_ENABLED: 'True'
         run: |
           python manage.py runserver 8000 &
           echo $! > django.pid

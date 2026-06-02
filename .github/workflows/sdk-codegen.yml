@@ -102,6 +102,15 @@ jobs:
           echo $! > django.pid
           # Wait for server to be ready
           timeout 30 bash -c 'until curl -f http://localhost:8000/health/ 2>/dev/null; do sleep 1; done'
+          echo "Django server started successfully"
+
+      - name: Test GraphQL endpoint
+        run: |
+          echo "Testing GraphQL endpoint..."
+          curl -X POST http://localhost:8000/graphql/ \
+            -H "Content-Type: application/json" \
+            -d '{"query":"{ __schema { queryType { name } } }"}' \
+            -v
 
       - name: Install codegen dependencies
         working-directory: sdk/codegen
@@ -111,7 +120,13 @@ jobs:
         working-directory: sdk/codegen
         env:
           GRAPHQL_ENDPOINT: http://localhost:8000/graphql/
-        run: pnpm run generate
+        run: |
+          echo "Generating SDK types from $GRAPHQL_ENDPOINT"
+          pnpm run generate || {
+            echo "Code generation failed. Checking Django server..."
+            curl -v http://localhost:8000/graphql/ || true
+            exit 1
+          }
 
       - name: Check for changes
         id: check_changes

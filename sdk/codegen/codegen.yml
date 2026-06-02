@@ -85,7 +85,7 @@ generates:
 
 hooks:
   afterAllFileWrite:
-    # Format generated files
-    - prettier --write
+    # Format generated files with prettier
+    - npx prettier --write
     # Run Python type generation after TypeScript
     - npm run generate:python

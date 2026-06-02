@@ -76,6 +76,9 @@ jobs:
           REDIS_URL: redis://localhost:6379/0
           SECRET_KEY: test-secret-key-for-ci
           DEBUG: 'True'
+          SOROBAN_RPC_URL: https://soroban-testnet.stellar.org
+          STELLAR_NETWORK_PASSPHRASE: 'Test SDF Network ; September 2015'
+          SOROSCAN_CONTRACT_ID: test-contract-id
         run: |
           python manage.py migrate --noinput
 
@@ -86,6 +89,9 @@ jobs:
           REDIS_URL: redis://localhost:6379/0
           SECRET_KEY: test-secret-key-for-ci
           DEBUG: 'True'
+          SOROBAN_RPC_URL: https://soroban-testnet.stellar.org
+          STELLAR_NETWORK_PASSPHRASE: 'Test SDF Network ; September 2015'
+          SOROSCAN_CONTRACT_ID: test-contract-id
         run: |
           python manage.py runserver 8000 &
           echo $! > django.pid

@@ -154,8 +154,7 @@ jobs:
       - name: Verify Python SDK
         working-directory: sdk/python
         run: |
-          pip install -e .
-          pip install pytest pytest-cov
+          pip install -e .[dev]
           pytest
 
       - name: Fail if types are out of sync (PR only)

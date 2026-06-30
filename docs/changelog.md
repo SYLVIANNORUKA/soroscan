@@ -6,12 +6,15 @@ All notable changes to this project will be documented in this file.
 
 ### Bug Fixes
 
+- Add resources and securityContext to (#817) ([03eabbc](03eabbcdaed9d10983ccdba5c0876765a4d3c8c4))
 - Return 429 Too Many Requests for rate limits (#348) ([84b2e7b](84b2e7b654808426eae37d893d98c121361de0a7))
 - Add mobile responsiveness for all pages #61 (#69) ([c03500d](c03500d7b57fbf7193abcda552b26e30e751fff0))
 - Resolve ruff linting errors (F841 unused variables) ([33ccd58](33ccd58928e1c45c6ed873610675a169d62e1954))
 
 ### Documentation
 
+- Create cookbook of real-world integration examples and use case tutorials (#822) ([7b709a5](7b709a5897bbb1c3485f38a6aedba4435fd517a1))
+- Add SDK, security, contract integration, and rate limit guides (#814) ([4180cd4](4180cd4fbeb00b6c0e9b4375b39da3c472ea018c))
 - Add IaC, release notes, and SDK development guides (#742) ([3bd77fe](3bd77fe84a74a799b23f2d1aed11af0c075d43bf))
 - Add database admin, contributing, troubleshooting, and roadmap guides (#740) ([ef6b6af](ef6b6afa133fac76b09f3009b50e600360a2b08b))
 - Add error states and validation patterns checklist (#684) ([b2f406b](b2f406ba10659d73248042fb370d95637744ea22))
@@ -24,6 +27,8 @@ All notable changes to this project will be documented in this file.
 
 ### Feat
 
+- Field-Level Authorization (GraphQL) (#806) ([6fe994a](6fe994a664bf319029cf5cf25f13c532ebb8753f))
+- Webhook Simulator for Testing (#747) ([6fa3e1a](6fa3e1a7ed78e593ac8bbc771620774da1efa076))
 - Add responsive mobile card grid for events (#713) ([81f54e4](81f54e4c97e1b19d66471045b091cd4a1e5fa71d))
 - Mobile navigation drawer (#700) ([9bd9cfb](9bd9cfba5b1e15bb6dbd563d54711d18ddf9b493))
 - Implemented event batch operations (#699) ([c1b6833](c1b68338fdb3e078b05cdd12fd1d499b7049a1ef))
@@ -36,6 +41,11 @@ All notable changes to this project will be documented in this file.
 
 ### Features
 
+- Add mobile-responsive-ui-optimization spec (#818) ([335eb77](335eb771ce6b8fbb9b825c206e4b6429b88e5689))
+- Optimize pools alerts and queue monitoring (#752) ([747f225](747f225869b97868bf612290af5e254531357b14))
+- Implement contract event export CLI, chaos testing suite, and automated changelogs (#750) ([17fa72c](17fa72c9ef3b77ee8d980f249f5da6f57d51f931))
+- Implement dual-language sdk test matrices, jaeger telemetry tracing, prometheus pXX tracking, and graphql governance docs (#751) ([4e5e0db](4e5e0dbfc533c2ac4284532898609fca7e39c0ee))
+- API performance improvements - gzip compression, N+1 detection, query caching, DB explain endpoint (#749) ([3bacec5](3bacec5a5c098398ae9c1e9dc412d34c7625ea43))
 - Payload compression, tracing, and DLQ observability (#743) ([3e050ca](3e050ca965ad4949dd1197ddec66f35cc15729de))
 - Resolve webhook headers, health checks, event filters, and dupl… (#734) ([e8ae880](e8ae880d1536978d63d4cee3ae71cc353854a499))
 - Add KeyboardShortcutsOverlay component and integrate into Providers (#732) ([55f03ef](55f03efd50381ca94eef82038ecfe216a4ac5c92))
@@ -145,6 +155,7 @@ All notable changes to this project will be documented in this file.
 
 ### Miscellaneous Tasks
 
+- Update changelog (#744) ([2b59977](2b59977bd9d61d2751d6fe9d1fb561a89c3b1510))
 - Clean tracked environment artifacts ([63e7b58](63e7b58b8648e937cfaa0a1e9509f7f5098a290a))
 - Configure pre-commit hooks for black, flake8, and isort (Closes #374) (#442) ([a4722da](a4722da830252ce28e8d081330aba3e5e2abd1a6))
 - Remove venv from tracking and add to .gitignore ([f9cfe5f](f9cfe5f16ebc8986cec7fe4c7e3b218a80f544fe))

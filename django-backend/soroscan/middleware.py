@@ -134,7 +134,7 @@ class RequestBodySizeMiddleware:
 
     def __call__(self, request):
         # We check this at the very beginning of the __call__
-        if request.method == "POST":
+        if request.method in ("POST", "PUT", "PATCH"):
             max_size = getattr(settings, "MAX_REQUEST_BODY_SIZE", 10485760)
             try:
                 content_length = int(request.META.get('CONTENT_LENGTH', 0))
@@ -200,7 +200,7 @@ class ApiDeprecationMiddleware:
             if path.strip("/") == norm_request_path:
                 response["Deprecation"] = "true"
                 response["Sunset"] = config.get("sunset", "")
-                response["Link"] = f'<{config.get("replacement", "")}>; rel="replacement"'
+                response["Link"] = f'<{config.get("replacement", "")}>; rel="alternate"'
                 break
         return response
 

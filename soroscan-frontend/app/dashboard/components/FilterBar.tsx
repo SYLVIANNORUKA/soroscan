@@ -17,7 +17,7 @@ interface FilterBarProps {
     tags: string[];
   };
   onFilterChange: (filters: Partial<FilterBarProps["filters"]>) => void;
-  onExport: (format: "csv" | "json") => void;
+  onExport: () => void;
   tagSuggestions: string[];
 }
 

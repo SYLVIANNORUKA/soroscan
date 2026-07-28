@@ -188,10 +188,21 @@ export default function WebhooksPage() {
             </div>
           )}
           <div className="flex gap-3">
-            <Button variant="danger" onClick={confirmDelete} className="flex-1">
+            <Button
+              type="button"
+              variant="danger"
+              onClick={confirmDelete}
+              className="flex-1"
+              data-testid="confirm-delete-webhook"
+            >
               DELETE_WEBHOOK
             </Button>
-            <Button variant="secondary" onClick={() => setDeleteTarget(null)}>
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={() => setDeleteTarget(null)}
+              data-testid="cancel-delete-webhook"
+            >
               CANCEL
             </Button>
           </div>

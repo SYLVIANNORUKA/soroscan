@@ -66,8 +66,8 @@ export default function WebhooksPage() {
     setTestingId(id)
     setTestResult(null)
     setTimeout(() => {
-      // Simulate: 80% success
-      const ok = Math.random() > 0.2
+      // Deterministic success for stable E2E / visual runs
+      const ok = true
       setTestResult({ id, ok, code: ok ? 200 : 503 })
       setTestingId(null)
       setTimeout(() => setTestResult(null), 4000)
@@ -95,6 +95,7 @@ export default function WebhooksPage() {
           </div>
           <Button
             data-tour="create-webhook"
+            data-testid="create-webhook-btn"
             variant="primary"
             size="lg"
             onClick={() => setCreateOpen(true)}
@@ -191,9 +192,9 @@ export default function WebhooksPage() {
             <Button
               type="button"
               variant="danger"
+              data-testid="confirm-delete-webhook-btn"
               onClick={confirmDelete}
               className="flex-1"
-              data-testid="confirm-delete-webhook"
             >
               DELETE_WEBHOOK
             </Button>
@@ -201,7 +202,7 @@ export default function WebhooksPage() {
               type="button"
               variant="secondary"
               onClick={() => setDeleteTarget(null)}
-              data-testid="cancel-delete-webhook"
+              data-testid="cancel-delete-webhook-btn"
             >
               CANCEL
             </Button>

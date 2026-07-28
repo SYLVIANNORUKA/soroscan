@@ -114,6 +114,7 @@ function LoginPageInner() {
             </label>
             <Input
               {...register('email')}
+              data-testid="login-email"
               placeholder="operator@soroscan.io"
               className={errors.email ? 'border-terminal-danger text-terminal-danger' : ''}
               autoComplete="email"
@@ -131,6 +132,7 @@ function LoginPageInner() {
             </label>
             <Input
               {...register('password')}
+              data-testid="login-password"
               type="password"
               placeholder="********"
               className={errors.password ? 'border-terminal-danger text-terminal-danger' : ''}
@@ -151,6 +153,7 @@ function LoginPageInner() {
 
           <Button
             type="submit"
+            data-testid="login-submit"
             className="w-full justify-center"
             disabled={isSubmitting}
           >
